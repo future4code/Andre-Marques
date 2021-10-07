@@ -31,7 +31,7 @@
 // const endereco = "São Paulo";
 // const profissao = "estudante";
 
-// function escreverSobreAlguem(){
+// function escreverSobreAlguem(n1, n2, n3, n4){
 //     console.log(`Eu sou ${nome}, tenho ${idade} anos, moro em ${endereco} e sou ${profissao}.`);
 // }
 
@@ -117,7 +117,7 @@
 // }
 
 // const entrada2 = (n1, n2) => {
-//     const soma = n1 + n2;80
+//     const soma = n1 + n2;
 //     entrada1(soma);
 // }
 
