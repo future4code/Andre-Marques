@@ -204,7 +204,7 @@
 //          }
 //     }   
 
-//     if(valor.tipo_de_jogo === 'IN'){
+//     if(valor.tipo_de_jogo === 'IN' || 'in'){
 //         valor.tipo_de_jogo = "Internacional";
 //         valorIngresso *= 4.10;
 //         valorTotal *= 4.10;
