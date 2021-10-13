@@ -142,7 +142,7 @@
 //     let valorTotal = 0;
 //     let valorIngresso = 0;
     
-//     if(valor.etapa_do_jogo === 'SF'){
+//     if(valor.etapa_do_jogo === 'SF' || valor.etapa_do_jogo === 'sf'){
 //         valor.etapa_do_jogo = "Semi-final";
 //         switch(valor.categoria){
 //             case 1:
@@ -162,7 +162,7 @@
 //                 valorTotal = valor.quantidade_ingresso * valorIngresso;
 //                 break;
 //         }
-//     }else if(valor.etapa_do_jogo === 'DT'){
+//     }else if(valor.etapa_do_jogo === 'DT' || valor.etapa_do_jogo === 'dt'){
 //         valor.etapa_do_jogo = "Decisão de terceiro lugar"
 //         switch(valor.categoria){
 //             case 1:
@@ -182,7 +182,7 @@
 //                 valorTotal = valor.quantidade_ingresso * valorIngresso;
 //                 break;
 //         }
-//     }else if(valor.etapa_do_jogo === 'FI'){
+//     }else if(valor.etapa_do_jogo === 'FI' || valor.etapa_do_jogo === 'fi'){
 //         valor.etapa_do_jogo = "Final";
 //         switch(valor.categoria){
 //             case 1:
