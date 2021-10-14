@@ -80,13 +80,15 @@ const array = [80, 30, 130, 40, 60, 21, 70, 120, 90, 103, 110, 55];
 // let novoArray = [];
 
 // const d = n =>{
-//     for(valor of n){
-//         novoArray[valor] = valor;
-//         console.log(`O elemento do index ${n.indexOf(valor)} é ${novoArray[valor]}`);
+//     for(let i = 0; i < n.length; i++){
+//         novoArray.push(
+//             `O elemento do index ${i} é ${n[i]}`
+//         );
 //     }
+//     return novoArray;
 // }
 
-// d(array);
+// console.log(d(array));
 
 //e)
 
