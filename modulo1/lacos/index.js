@@ -1,23 +1,18 @@
 // INTERPRETAÇÃO
 
 /*
-
 1-  10
-
 2-a) 19
      21
      23
      25
      27
      30 
-
   b)Sim.
     const lista = [10, 11, 12, 15, 18, 19, 21, 23, 25, 27, 30]
-
     for (let numero of lista) {
         console.log(lista.indexOf(numero))
     }
-
 3- *
    **
    ***
@@ -42,9 +37,9 @@
 
 //2-
 
-//const array = [80, 30, 130, 40, 60, 21, 70, 120, 90, 103, 110, 55];
+const array = [80, 30, 130, 40, 60, 21, 70, 120, 90, 103, 110, 55];
 
-//a)
+// //a)
 
 // const a = n =>{
 //     for(valor of n){
@@ -190,16 +185,3 @@
 // }
 
 // numEscolhido(num1, num2);
-
-
-
-
-
-
-
-
-
-
-
-
-
