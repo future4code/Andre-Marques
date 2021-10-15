@@ -71,10 +71,11 @@
 // // console.log(novoArrayNome);
 
 // //b)
-// const novoArrayNomePreco = produtos.map((array) => {
-//     array.preco = (array.preco - (array.preco / 100) * 5).toFixed(2);
+// const novoArrayNomePreco = produtos.map((produto) => {
+//     return {nome: produto.nome, preco: (produto.preco - (produto.preco / 100) * 5).toFixed(2)};
+// });
 
-//     return array;
+// console.log(novoArrayNomePreco);
 // });
 
 // console.log(novoArrayNomePreco);
