@@ -44,61 +44,58 @@ let perguntaUsuario = confirm("Deseja iniciar uma nova rodada?");
 
 
 while(perguntaUsuario === true){
-   if(perguntaUsuario === true){
-      
-      const compararNumero = (n) => {
-         if(n[0].texto === n[1].texto){
-            n.pop();
-            n.push(comprarCarta());
-         }
+   
+   const compararNumero = (n) => {
+      if(n[0].texto === n[1].texto){
+         n.pop();
+         n.push(comprarCarta());
       }
-      const compararNumero1 = (n, m) => {
-         if(n[0] || n[1] === m[0]){
-            m.splice(0, 1);
-            m.push(comprarCarta());   
-         } else if(n[0] || n[1] === m[1]){
-            m.splice(1, 1);
-            m.push(comprarCarta);  
-         }
+   }
+   const compararNumero1 = (n, m) => {
+      if(n[0] || n[1] === m[0]){
+         m.splice(0, 1);
+         m.push(comprarCarta());   
+      } else if(n[0] || n[1] === m[1]){
+         m.splice(1, 1);
+         m.push(comprarCarta);  
       }
+   }
 
-      if(perguntaUsuario === false){
-         console.log("O jogo acabou.");
-      } else{
-         let usuario = [];
-         let computador = [];
-         
-         for(i = 0;i < 2; i++){
-            usuario.push(comprarCarta());
-            computador.push(comprarCarta());
-         }
-         
-         compararNumero(usuario); 
-         compararNumero(computador);
-         compararNumero1(usuario, computador);
-
-         let usuarioTotal = usuario[0].valor + usuario[1].valor;
-         let computadorTotal = computador[0].valor + computador[1].valor;
-
-         console.log(`Usuario - cartas : ${usuario[0].texto} ${usuario[1].texto} - pontuacao ${usuarioTotal}`);
-         console.log(`Computador - cartas : ${computador[0].texto} ${computador[1].texto} - pontuacao ${computadorTotal}`);
-
-         if((usuarioTotal === computadorTotal) && (usuarioTotal && computadorTotal) <= 21){
-            console.log("Empate!");
-         } else if((usuarioTotal > computadorTotal) && (usuarioTotal <= 21)){
-            console.log("O usuário ganhou!");
-         } else if((usuarioTotal < computadorTotal) && (computadorTotal <= 21)){
-            console.log("O computador ganhou");
-         } else{
-            console.log("Ultrapassaram 21 pontos");
-         }
-      }
+   if(perguntaUsuario === false){
+      console.log("O jogo acabou.");
    } else{
-      console.log("O jogo acabou");
+      let usuario = [];
+      let computador = [];
+      
+      for(i = 0;i < 2; i++){
+         usuario.push(comprarCarta());
+         computador.push(comprarCarta());
+      }
+      
+      compararNumero(usuario); 
+      compararNumero(computador);
+      compararNumero1(usuario, computador);
+
+      let usuarioTotal = usuario[0].valor + usuario[1].valor;
+      let computadorTotal = computador[0].valor + computador[1].valor;
+
+      console.log(`Usuario - cartas : ${usuario[0].texto} ${usuario[1].texto} - pontuacao ${usuarioTotal}`);
+      console.log(`Computador - cartas : ${computador[0].texto} ${computador[1].texto} - pontuacao ${computadorTotal}`);
+
+      if((usuarioTotal === computadorTotal) && (usuarioTotal && computadorTotal) <= 21){
+         console.log("Empate!");
+      } else if((usuarioTotal > computadorTotal) && (usuarioTotal <= 21)){
+         console.log("O usuário ganhou!");
+      } else if((usuarioTotal < computadorTotal) && (computadorTotal <= 21)){
+         console.log("O computador ganhou");
+      } else{
+         console.log("Ultrapassaram 21 pontos");
+      }
    }
    
    perguntaUsuario = confirm("Deseja iniciar uma nova rodada?");
    console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - ");
-   boasVindas();
+   if(perguntaUsuario === false){
+      console.log("O jogo acabou.");
+   }
 }
-console.clear();
