@@ -1,3 +1,4 @@
+```
 function calculaSalario(qtdeCarrosVendidos, valorTotalVendas) {
  // Escreva seu código aqui
  
@@ -7,3 +8,4 @@ function calculaSalario(qtdeCarrosVendidos, valorTotalVendas) {
   
   return salario + carroSalario + comissao;
 }
+```
