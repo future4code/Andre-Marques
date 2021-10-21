@@ -91,6 +91,10 @@ button:hover{
 
 #container-de-descricao>ol {
     padding: 15px 0px;
+    width: 15vw;
+    margin: auto;
+    text-align: start;
+    padding-left: 15px;
 }
 
 
