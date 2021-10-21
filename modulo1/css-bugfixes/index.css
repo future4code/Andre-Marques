@@ -16,10 +16,16 @@ h2 {
     text-align: center;
 }
 
+p, h1, h2, h3, button, a, td, li{
+    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto Mono', monospace;
+}
+
+
 input {
     height: 20px;
     width: 500px;
-    border: 0px solid;
+    border: 0px;
     border-bottom: 2px solid;
 }
 
