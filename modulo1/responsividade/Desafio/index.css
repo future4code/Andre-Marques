@@ -1,0 +1,115 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+div {
+    border: 1px solid black;
+}
+
+#main-container{
+   display: grid;
+   gap: 10px;
+   height: 100%;
+}
+
+.first-container{
+    display: grid;
+}
+
+.second-container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.third-container{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.fourth-container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+#first-block {
+    background-color: red;
+    height: 100%;
+}
+
+.blue-block {
+    background-color: blue;
+}   
+
+.yellow-block {
+    background-color: yellow;
+}
+
+.green-block1 {
+    background-color: green;
+}
+
+.green-block2 {
+    background-color: green;
+}
+
+.black-block{
+    background-color: black;
+    color: white;
+}
+
+.white-block1 {
+    background-color: white;
+}
+
+.white-block2 {
+    background-color: white;
+}
+
+.white-block3 {
+    background-color: white;
+}
+
+@media screen and (min-device-width : 481px) and (max-device-width : 800px) {
+    /* tablets */
+    .second-container{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .green-block1{
+        grid-row: 2/3;
+        grid-column: 1/3;
+    }
+    .green-block2{
+        grid-row: 4/5;
+        grid-column: 1/3;
+    }
+
+    .fourth-container{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .white-block3 {
+        grid-column: 1/3;
+    }
+}
+
+@media screen and (max-device-width : 480px) {
+    /* celulares */
+    .second-container{
+        grid-template-columns: 1fr;
+    }
+    
+    .third-container{
+        grid-template-columns: 1fr;
+    }
+    
+    .fourth-container{
+        grid-template-columns: 1fr;
+    }
+}
