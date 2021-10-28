@@ -87,12 +87,16 @@ function compararTamanhoArray (valor1, valor2){
 }
 
 function saberVencedor(valor1, valor2){
-   if((valorTotalUsuario(valor1) > valorTotalComputador(valor2)) && (valorTotalUsuario(valor1) <= 21)){
+   if(valorTotalUsuario(usuario) > valorTotalComputador(computador) && valorTotalUsuario(usuario) <= 21){
       return "Você ganhou!";
-   } else if((valorTotalComputador(valor2)) <= 21 && (valorTotalUsuario(valor1) < valorTotalComputador(valor2))){
+   } else if(valorTotalUsuario(usuario) < valorTotalComputador(computador) && valorTotalComputador < 21 && valorTotalUsuario(usuario) <= 21){
+      return "Você ganhou!"
+   } else if(valorTotalUsuario(computador) > valorTotalComputador(usuario) && valorTotalUsuario(computador <= 21)){
       return "O computador ganhou!";
-   } else if((valorTotalUsuario(valor1) === valorTotalComputador(valor2)) && ((valorTotalUsuario(valor1) && valorTotalComputador(valor2) <= 21))){
-      return "Empatou";
+   } else if(valorTotalUsuario(computador) < valorTotalComputador(usuario && valorTotalComputador < 21 && valorTotalUsuario(computador)) <= 21){
+      return "O computador ganhou";
+   } else if(valorTotalUsuario(usuario) > 21 && valorTotalComputador(computador)){
+      return "Nenhum dos dois ganhou!"
    }
 }
 
