@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { ThemeProvider } from 'styled-components'
 import { IconeComContador } from '../IconeComContador/IconeComContador'
 import iconeCoracaoBranco from '../../img/favorite-white.svg'
 import iconeCoracaoPreto from '../../img/favorite.svg'
@@ -7,9 +7,14 @@ import iconeComentario from '../../img/comment_icon.svg'
 import iconeMarcacao from '../../img/marcacao.svg'
 import iconeMarcacaoPreto from '../../img/marcacao-preto.svg'
 import iconeDeCompartilhar from '../../img/share1.svg'
+import facebook from '../../img/face.svg'
+import instagram from '../../img/insta.svg'
+import twitter from '../../img/twitter.svg'
 import { SecaoComentario } from '../SecaoComentario/SecaoComentario'
 import { IconeMarcador } from '../IconeMarcador/IconeMarcador'
 import { IconeCompartilhar } from '../IconeCompartilhar/IconeCompartilhar'
+import { RedeSocial } from '../RedeSocial/RedeSocial'
+
 
 const PostContainer = styled.div`
   border: 1px solid gray;
@@ -54,18 +59,6 @@ class Post extends React.Component {
   }
 
   onClickCurtida = () => {
-    // console.log('Curtiu!')
-
-    // if(this.state.curtido){
-    //   this.setState({
-    //     curtido: !this.state.curtido,
-    //     numeroCurtidas: this.state.numeroCurtidas - 1})
-    // } else {
-    //   this.setState({
-    //     curtido: this.state.curtido,
-    //     numeroCurtidas: this.state.numeroCurtidas + 1})
-    // }
-
     this.setState({
       curtido: true,
       numeroCurtidas: this.state.numeroCurtidas + 1
@@ -98,7 +91,7 @@ class Post extends React.Component {
 
   onClickCompartilhar = () => {
     this.setState({
-      compartilhado: true
+      compartilhado: !this.state.compartilhado
     })
   }
 
@@ -106,6 +99,12 @@ class Post extends React.Component {
     this.setState({
       comentando: false,
       numeroComentarios: this.state.numeroComentarios + 1
+    })
+  }
+
+  aoEnviarCompartilhamento = () => {
+    this.setState({
+      compartilhado: false
     })
   }
 
@@ -141,6 +140,12 @@ class Post extends React.Component {
       componenteComentario = <SecaoComentario aoEnviar={this.aoEnviarComentario} />
     }
 
+    let componenteRedeSocial
+
+    if(this.state.compartilhado) {
+      componenteRedeSocial = <RedeSocial />
+    }
+
     return (
       <PostContainer>
         <PostHeader>
@@ -174,6 +179,7 @@ class Post extends React.Component {
           />
         </PostFooter>
         {componenteComentario}
+        {componenteRedeSocial}
       </PostContainer>
     )
   }
