@@ -1,0 +1,184 @@
+body {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+
+.tela-inteira {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  width: 100%;
+  position: fixed;
+  background-color: red;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+  justify-content: center;
+  padding: 0 50px;
+  height: 10%;
+}
+
+header h1{
+  align-items: start;
+  grid-column: 1/2;
+}
+
+header input{
+  margin-right: 80px;
+  grid-column: 2/5;
+  width: 50%;
+}
+
+main {
+  margin-top: 80px;
+  min-height: 80%;
+  display: flex;
+}
+
+.menu-vertical {
+  position: fixed;
+  flex-basis: 30%;
+  padding-right: 10px;
+  border-right-style: solid;
+  border-right-width: thin;
+}
+
+.botoes-meunu-vertical {
+  list-style-type: none;
+}
+
+.painel-de-videos {
+  margin-left: 125px;
+  padding-left: 20px;
+  padding-top: 20px;
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 24.8% 0.2%);
+  grid-template-rows: repeat(8, 270px 20px);
+}
+
+.media1 {
+  grid-column-start: 1;
+  grid-row-start: 1;
+}
+
+.media2 {
+  grid-column-start: 3;
+  grid-row-start: 1;
+}
+
+.media3 {
+  grid-column-start: 5;
+  grid-row-start: 1;
+}
+
+.media4 {
+  grid-column-start: 7;
+  grid-row-start: 1;
+}
+
+.media5 {
+  grid-column-start: 1;
+  grid-row-start: 3;
+}
+
+.media6 {
+  grid-column-start: 3;
+  grid-row-start: 3;
+}
+
+.media7 {
+  grid-column-start: 5;
+  grid-row-start: 3;
+}
+
+.media8 {
+  grid-column-start: 7;
+  grid-row-start: 3;
+}
+
+.media9 {
+  grid-column-start: 1;
+  grid-row-start: 5;
+}
+
+.media10 {
+  grid-column-start: 3;
+  grid-row-start: 5;
+}
+
+.media11 {
+  grid-column-start: 5;
+  grid-row-start: 5;
+}
+
+.media12 {
+  grid-column-start: 7;
+  grid-row-start: 5;
+}
+
+.media13{
+  grid-column-start: 1;
+  grid-row-start: 7;
+}
+
+.media14 {
+  grid-column-start: 3;
+  grid-row-start: 7;
+}
+
+.media15 {
+  grid-column-start: 5;
+  grid-row-start: 7;
+}
+
+.media16 {
+  grid-column-start: 7;
+  grid-row-start: 7;
+}
+
+
+.box-pagina-principal {
+  display: grid;
+  grid-template-rows: 3fr 1fr;
+  grid-template-columns: 1fr;
+  border-style: solid;
+  border-width: thin; 
+  align-items: start;
+  justify-items: stretch;
+}
+
+
+footer {
+  height: 10%;
+  background-color: grey;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.box-pagina-principal > img {
+  width: 100%;
+  height: 200px;
+}
+
+h4 {
+  margin-left: 20px;
+}
+
+@media screen and (max-device-width : 480px) {
+  /* celulares */
+  .painel-de-videos {
+    display: flex;
+    flex-direction: column;
+    margin-right: 90px;
+    
+  }
+  }
