@@ -4,22 +4,38 @@ import styled from "styled-components"
 
 const DivPlaylist = styled.div`
     width: 100%;
-    border: 1px solid black;
     display: flex;
     flex-direction: column;
     align-items: center;
 `
 
 const DivList = styled.div`
-    width: 200px;
+    width: 300px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding-top: 20px;
+    padding-bottom: 20px;
 
     button{
         height: 25px;
+    }
+`
+
+const DivTracks = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    li{
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+    button{
+        margin-bottom: 10px;
     }
 `
 
@@ -27,17 +43,60 @@ export default class Playlist extends React.Component{
 
     state = {
         playlist: [],
+        tracks: [],
+        name: "",
+        id: "",
+        artist: "",
+        url: "",
+        addSong: 0,
     }
 
     componentDidMount() {
-        this.getPlaylist()
+        this.getAllPlaylist()
     }
 
     componentDidUpdate(){
-        this.getPlaylist()
+        this.getAllPlaylist()
     }
 
-    getPlaylist = async () =>{
+    handleName = (e) => {
+        this.setState({name: e.target.value})
+    }
+
+    handleArtist = (e) => {
+        this.setState({artist: e.target.value})
+    }
+
+    handleUrl = (e) => {
+        this.setState({url: e.target.value})
+    }
+
+
+    toAddSong = () => {
+        if(this.state.addSong === 0){
+            return this.setState({addSong: 1})
+        } else{
+            return this.setState({addSong: 0})
+        }
+    }
+
+    ShowInputAddSong = () => {
+        
+        if(this.state.addSong === 1){
+            return(
+            <div>
+                <input placeholder="Insert the new song" value={this.state.name} onChange={this.handleName}></input>
+                <input placeholder="Insert the artist" value={this.state.artist} onChange={this.handleArtist}></input>
+                <input placeholder="Insert the url" value={this.state.url} onChange={this.handleUrl}></input>
+                <button onClick={() => this.addtrackToPlaylist()}>Save</button>
+            </div>
+            )
+        } else{
+            return ""
+        } 
+    }
+
+    getAllPlaylist = async () =>{
         const url = 'https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists'
 
         try{
@@ -52,6 +111,49 @@ export default class Playlist extends React.Component{
         }
     }
 
+    getPlaylistTrack = async (id) => {
+        const url = `https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists/${id}/tracks`
+
+        try{
+            const response = await axios.get(url, {
+                headers: {
+                    Authorization: "andre-marques-carver"
+                }
+            })
+            console.log(response.data.result.tracks)
+            this.setState({tracks: response.data.result.tracks})
+            this.setState({id: id})
+        } catch(err) {
+            console.log(err.response)
+        }
+    }
+
+    addtrackToPlaylist = async () => {
+        const url = `https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists/${this.state.id}/tracks`
+        const body = {
+            name: this.state.name,
+            artist: this.state.artist,
+            url: this.state.url
+        }
+
+        try{
+            const response = await axios.post(url, body, {
+                headers:{
+                    Authorization: "andre-marques-carver"
+
+                }
+            })
+            alert("Sucess")
+            this.setState({name: "", artist: "", url: ""})
+            this.getPlaylistTrack()
+        } catch(err){
+            alert(err.response)
+        }
+
+    }
+
+   
+
     deletePlaylist = async (id) => {
         const url = `https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists/${id}`
 
@@ -62,28 +164,51 @@ export default class Playlist extends React.Component{
                 }
             })
             this.setState({playlist: response.data.result.list})
-            this.getPlaylist()
+            this.getAllPlaylist()
         } catch(err) {
             console.log(err.response)
         }
     }
 
   render() {
+
+    const renderTracks = this.state.tracks.map((value) => {
+        let src = value.url + '?utm_source=generator'
+        return(
+            <DivTracks key={value.id}>
+                
+                <iframe title="This is a unique title" src={src} width="300" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+               
+                {/* <li>{value.name}</li>
+                <button >Play</button>
+                <button >Pause</button> */}
+            </DivTracks>
+        )
+    })
     
     const renderPlaylist = this.state.playlist.map((value) => {
         return (
-            <DivList>           
+            <DivList key={value.id}>           
                 <p>{value.name}</p>
                 <button onClick={() => this.deletePlaylist(value.id)}>X</button>
+                <button onClick={() => this.getPlaylistTrack(value.id)}>Open Playlist</button>
+                <button onClick={this.toAddSong}>Add Song</button>
             </DivList>
         )
     })
-
+    
     return(
-
+        
       <DivPlaylist>
         <button onClick={this.props.toCreate}>Create a new Playlist</button>
         {renderPlaylist}
+        <div>
+            {renderTracks}
+            <div>
+                {this.ShowInputAddSong()}
+            </div>
+        </div>
+        
       </DivPlaylist>
     )
   }
