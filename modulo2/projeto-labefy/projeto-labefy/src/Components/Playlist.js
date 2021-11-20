@@ -39,6 +39,13 @@ const DivTracks = styled.div`
     }
 `
 
+const DivInputSong = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+`
+
 export default class Playlist extends React.Component{
 
     state = {
@@ -84,12 +91,12 @@ export default class Playlist extends React.Component{
         
         if(this.state.addSong === 1){
             return(
-            <div>
+            <DivInputSong>
                 <input placeholder="Insert the new song" value={this.state.name} onChange={this.handleName}></input>
                 <input placeholder="Insert the artist" value={this.state.artist} onChange={this.handleArtist}></input>
                 <input placeholder="Insert the url" value={this.state.url} onChange={this.handleUrl}></input>
                 <button onClick={() => this.addtrackToPlaylist()}>Save</button>
-            </div>
+            </DivInputSong>
             )
         } else{
             return ""
@@ -98,13 +105,13 @@ export default class Playlist extends React.Component{
 
     getAllPlaylist = async () =>{
         const url = 'https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists'
-
+        const headers = {headers : {
+                Authorization: "andre-marques-carver"
+            }
+        }    
+        
         try{
-            const response = await axios.get(url, {
-                headers: {
-                    Authorization: "andre-marques-carver"
-                }
-            })
+            const response = await axios.get(url, headers)
             this.setState({playlist: response.data.result.list})
         } catch(err) {
             console.log(err.response)
@@ -113,13 +120,13 @@ export default class Playlist extends React.Component{
 
     getPlaylistTrack = async (id) => {
         const url = `https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists/${id}/tracks`
+        const headers ={ headers :{
+                Authorization: "andre-marques-carver"
+            }
+        }
 
         try{
-            const response = await axios.get(url, {
-                headers: {
-                    Authorization: "andre-marques-carver"
-                }
-            })
+            const response = await axios.get(url, headers)
             console.log(response.data.result.tracks)
             this.setState({tracks: response.data.result.tracks})
             this.setState({id: id})
@@ -130,6 +137,9 @@ export default class Playlist extends React.Component{
 
     addtrackToPlaylist = async () => {
         const url = `https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists/${this.state.id}/tracks`
+        const headers = {
+            Authorization: "andre-marques-carver"
+        }
         const body = {
             name: this.state.name,
             artist: this.state.artist,
@@ -137,12 +147,7 @@ export default class Playlist extends React.Component{
         }
 
         try{
-            const response = await axios.post(url, body, {
-                headers:{
-                    Authorization: "andre-marques-carver"
-
-                }
-            })
+            const response = await axios.post(url, body, headers)
             alert("Sucess")
             this.setState({name: "", artist: "", url: ""})
             this.getPlaylistTrack()
@@ -176,12 +181,7 @@ export default class Playlist extends React.Component{
         let src = value.url + '?utm_source=generator'
         return(
             <DivTracks key={value.id}>
-                
                 <iframe title="This is a unique title" src={src} width="300" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
-               
-                {/* <li>{value.name}</li>
-                <button >Play</button>
-                <button >Pause</button> */}
             </DivTracks>
         )
     })
