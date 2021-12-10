@@ -1,29 +1,26 @@
 import styled from "styled-components";
 
 export const DivMain = styled.div`
-    border: 1px solid black;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
 `
 export const DivHeader = styled.div`
-    border: 1px solid black;
+    box-shadow: 5px 5px 5px black;
+    border-radius: 25px 5px;
     display: flex;
     align-items: center;
+    justify-content: space-evenly;
     height: 100px;
-    width: 100%;
-`
+    width: 350px;
+    background-image: linear-gradient(to bottom, red, yellow);
 
-export const DivFooter = styled.div`
-    border: 1px solid black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    width: 100%;
+    button{
+        margin: 0 10px;
+    }
 `
 
 export const FormCreateTrip = styled.form`
@@ -31,6 +28,8 @@ export const FormCreateTrip = styled.form`
     flex-direction: column;
     margin: 30px;
     align-items: center;
+    justify-content: center;
+    height: 100%;
 
     select {
         margin: 10px;

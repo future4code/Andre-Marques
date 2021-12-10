@@ -1,7 +1,8 @@
 import { useHistory, useParams } from 'react-router'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { DivMain, DivHeader, DivViagem, DivTripList, DivPeopleList, DivButton } from './Styled'
+import { DivChoice, DivApproved, DivH3, DivMain, DivHeader, DivViagem, DivTripList, DivPeopleList, DivButton } from './Styled'
+import { BASE_URL } from '../../constants/Constants'
 
 function TripDetailsPage() {
 
@@ -15,51 +16,57 @@ function TripDetailsPage() {
     }
 
     useEffect(() => {
-        axios.get(`https://us-central1-labenu-apis.cloudfunctions.net/labeX/andre-marques-carver/trip/${params.id}`, {
+        axios.get(`${BASE_URL}trip/${params.id}`, {
             headers: {
                 auth: token
             }
         })
         .then((res) => {
             setTrip(res.data.trip)
-            
         })
         .catch((err) => {
-            console.log(err.response.data)
+            alert(err.response.data)
         })
     }, [params.id])
-
+       
     const approveCandidate = (id, value) => {
 
         const body = {
             approve: value
         }
 
-        axios.put(`https://us-central1-labenu-apis.cloudfunctions.net/labeX/andre-marques-carver/trips/${trip.id}/candidates/${id}/decide`, body, {
+        axios.put(`${BASE_URL}trips/${trip.id}/candidates/${id}/decide`, body, {
             headers: {
                 auth: token,
-                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/json'
             }
         })
         .then((res) => {
-            console.log(res.data)
+            if(value === true){
+                alert("Candidato aprovado!")
+            } else {
+                alert("Candidato recusado!")
+            }
         })
         .catch((err) => {
-            console.log(err.response.data.message)
-            console.log(id)
+            alert(err.response.data.message)
         })
     }
+
+    useEffect(() => {
+        renderCandidates()
+    }, [trip.candidates])
 
     const renderCandidates = () => {
         return(
             trip.candidates && trip.candidates.map((candidate, index) => {
                 return (
                     <DivPeopleList key={index}>
-                        <p>Nome: {candidate.name}</p>
-                        <p>Profissao: {candidate.profession}</p>
-                        <p>Idade: {candidate.age}</p>
-                        <p>País: {candidate.country}</p>
-                        <p>Descricao: {candidate.applicationText}</p>
+                        <p><strong>Nome:</strong> {candidate.name}</p>
+                        <p><strong>Profissao:</strong> {candidate.profession}</p>
+                        <p><strong>Idade:</strong> {candidate.age}</p>
+                        <p><strong>País:</strong> {candidate.country}</p>
+                        <p><strong>Descricao:</strong> {candidate.applicationText}</p>
                         <DivButton>
                             <button onClick={() => approveCandidate(candidate.id, true)}>Aprovar</button>
                             <button onClick={() => approveCandidate(candidate.id, false)}>Reprovar</button>
@@ -69,12 +76,7 @@ function TripDetailsPage() {
             })
         )
     }
-
-    useEffect(() => {
-        renderCandidates()
-    }, [trip.approved])
     
- 
     return (
         <DivMain>
 
@@ -83,27 +85,32 @@ function TripDetailsPage() {
             </DivHeader>
 
             <DivViagem>
-                <h1>{trip.name}</h1>
                 <DivTripList>
-                    <p>Descricao: {trip.description}</p>
-                    <p>Planeta: {trip.planet}</p>
-                    <p>Duracao: {trip.durationInDays} dias</p>
-                    <p>Data: {trip.date}</p>
+                    <DivH3>
+                        <h3>{trip.name}</h3>
+                    </DivH3>
+                        <p><strong>Descricao:</strong> {trip.description}</p>
+                        <p><strong>Planeta:</strong> {trip.planet}</p>
+                        <p><strong>Duracao:</strong> {trip.durationInDays} dias</p>
+                        <p><strong>Data:</strong> {trip.date}</p>
                 </DivTripList>
 
-                <h2>Candidatos Pendente</h2>
+                <DivChoice>
+                    <h2>Candidatos Pendente</h2>
                     {renderCandidates()}
-                  
+                </DivChoice>    
 
-                <div>
+                <DivApproved>
                     <h2>Candidatos Aprovados</h2>
-                    {/* {trip.approved} */}
-                    <ul>
-                        <li>André</li>
-                        <li>Giovanni</li>
-                        <li>Lucas</li>
-                    </ul>
-                </div>
+                    {trip.approved && trip.approved.map((candidate, index) => {
+                        return (
+                            <ul key={index}>
+                                <li>{candidate.name}</li>
+                            </ul>
+                        )
+                    })}
+                    
+                </DivApproved>
             </DivViagem>
 
         </DivMain>

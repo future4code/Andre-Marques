@@ -1,7 +1,8 @@
 import axios from 'axios'
 import React, {useState, useEffect} from 'react'
 import { useHistory } from 'react-router'
-import { DivMain, DivHeader, DivFooter, DivTripList } from './Styled'
+import { DivMain, DivHeader, DivTripList, DivTripContainer } from './Styled'
+import { BASE_URL } from '../../constants/Constants'
 
 function ListTripsPage() {
 
@@ -17,13 +18,12 @@ function ListTripsPage() {
     }
 
     useEffect(() => {
-        axios.get('https://us-central1-labenu-apis.cloudfunctions.net/labeX/andre-marques-carver/trips')
+        axios.get(`${BASE_URL}trips`)
         .then((res) =>{
-            console.log(res.data.trips)
             setTrips(res.data.trips)
         })
         .catch((err) => {
-            console.log(err.response.data)
+            alert(err.response.data)
         })
     }, [])
 
@@ -31,35 +31,22 @@ function ListTripsPage() {
         <DivMain>
             <DivHeader>
                 <button onClick={goToHomePage}>Voltar</button>
+                <button onClick={goToApplicationFormPage}>Inscrever-se</button>
             </DivHeader>
 
-            <div>
-                <h1>Lista de Viagens</h1>
-            </div>
-
-            {trips.map((trip) => {
-                return (
-                    <DivTripList key={trip.id}>
-                        <p>Nome: {trip.name}</p>
-                        <p>Descricao: {trip.description}</p>
-                        <p>Planeta: {trip.planet}</p>
-                        <p>Duracao: {trip.durationInDays}</p>
-                        <p>Data: {trip.date}</p>
-                    </DivTripList> 
-                )
-            })}
-
-            {/* <div>
-                <p>Nome:{trips && trips.name}</p>
-                <p>Descricao</p>
-                <p>Planeta</p>
-                <p>Duracao</p>
-                <p>Data</p>
-            </div> */}
-
-            <DivFooter>
-                <button onClick={goToApplicationFormPage}>Inscrever-se</button>
-            </DivFooter>
+            <DivTripContainer>
+                {trips.map((trip) => {
+                    return (
+                        <DivTripList key={trip.id}>
+                            <p><strong>Nome:</strong> {trip.name}</p>
+                            <p><strong>Descricao:</strong> {trip.description}</p>
+                            <p><strong>Planeta:</strong> {trip.planet}</p>
+                            <p><strong>Duracao:</strong> {trip.durationInDays}</p>
+                            <p><strong>Data:</strong> {trip.date}</p>
+                        </DivTripList> 
+                    )
+                })}
+            </DivTripContainer>
         </DivMain>
     )
 }

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { useHistory } from 'react-router'
 import axios from 'axios'
-import { COUNTRIES } from '../../constants/Constants'
+import { COUNTRIES, BASE_URL } from '../../constants/Constants'
 import { DivMain, DivHeader, Form } from './Styled'
 import useForm from '../../hooks/useForm'
 
@@ -36,28 +36,28 @@ function ApplicationFormPage() {
     const onSubmitApplication = (e) => {
         e.preventDefault()
 
-        const headers = {
-            'Content-Type' : 'application/json'
-        }
-
-        axios.post(`https://us-central1-labenu-apis.cloudfunctions.net/labeX/andre-marques-carver/trips/${id}/apply`, form, headers)      
+        axios.post(`${BASE_URL}trips/${id}/apply`, form, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })      
         .then((res) =>{
-            console.log(res.data)
+            alert("Registro efetuado com sucesso")
             setTrip("")
             cleanFields()
         })
         .catch((err) => {
-            console.log(err.response.data.message)
+            alert(err.response.data.message)
         })
     }
 
     useEffect(() => {
-        axios.get('https://us-central1-labenu-apis.cloudfunctions.net/labeX/andre-marques-carver/trips')
+        axios.get(`${BASE_URL}trips`)
         .then((res) =>{
             setListTrips(res.data.trips)
         })
         .catch((err) => {
-            console.log(err.response.data)
+            alert(err.response.data)
         })
     }, [])
 
@@ -69,7 +69,8 @@ function ApplicationFormPage() {
             </DivHeader>
 
             <Form onSubmit={onSubmitApplication}>
-                <select value={trip} onChange={handleTrip}>
+                <select required name="trip" onChange={handleTrip}>
+                    <option selected disabled>Selecione uma viagem</option>
                     {listTrips.map((trip, index) => {
                         return <option key={index}>{trip.name}</option>
                     })}

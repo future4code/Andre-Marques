@@ -1,7 +1,8 @@
 import { useHistory } from 'react-router'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { DivMain, DivHeader, DivTripList, DivFooter } from './Styled'
+import { DivContainer, DivP, DivMain, DivHeader, DivTripList, DivButton } from './Styled'
+import { BASE_URL } from '../../constants/Constants'
 
 function AdminHomePage() {
 
@@ -28,19 +29,22 @@ function AdminHomePage() {
     }
 
     const deleteTrip = (id) => {
+        if(window.confirm("Tem certeza que deseja deletar essa viagem?")){
+            axios.delete(`${BASE_URL}trips/${id}`, {
+                headers: {
+                    auth: newToken, 
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then((res) => {
+                alert("Viagem deletada com sucesso!")
+            })
+            .catch((err) => {
+                alert(err.response.data)
+            })
+        }
         
-        axios.delete(`https://us-central1-labenu-apis.cloudfunctions.net/labeX/andre-marques-carver/trips/${id}`, {
-            headers: {
-                auth: newToken, 
-                'Content-Type': 'application/json'
-            }
-        })
-        .then((res) => {
-            console.log(res.data)
-        })
-        .catch((err) => {
-            console.log(err.response.data)
-        })
+        
 
     }
 
@@ -59,7 +63,7 @@ function AdminHomePage() {
             setListTrips(res.data.trips)
         })
         .catch((err) => {
-            console.log(err.response.data)
+            alert(err.response.data)
         })
     }, [listTrips])
 
@@ -68,26 +72,25 @@ function AdminHomePage() {
 
             <DivHeader>
                 <button onClick={goToHomePage}>Voltar</button>
+                <button onClick={goToCreateTripPage}>Criar Viagem</button>
                 <button onClick={goToLoginPage}>Sair</button>
             </DivHeader>
 
-            <DivTripList>
+            <DivContainer>
                 {listTrips && listTrips.map((trip, index) => {
                     return (
-                        <ul key={index}>
-                            <div>
-                            <li>{trip.name}</li>
-                            <button onClick={() => getTripDetail(trip.id)}>Ver</button>
-                            <button onClick={() => deleteTrip(trip.id)}>Excluir</button>
-                            </div>
-                        </ul>
+                        <DivTripList key={index}>
+                            <DivP>
+                                <p>{trip.name}</p>
+                            </DivP>
+                                <DivButton>
+                                    <button onClick={() => getTripDetail(trip.id)}>Ver</button>
+                                    <button onClick={() => deleteTrip(trip.id)}>Excluir</button>
+                                </DivButton>
+                        </DivTripList>
                     )
                 })}
-            </DivTripList>
-
-            <DivFooter>
-                <button onClick={goToCreateTripPage}>Criar Viagem</button>
-            </DivFooter>
+            </DivContainer>
 
         </DivMain>
     )

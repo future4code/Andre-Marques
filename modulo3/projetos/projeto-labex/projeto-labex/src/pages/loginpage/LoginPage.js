@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { DivMain, DivHeader, DivInput } from './Styled'
 import useForm from '../../hooks/useForm'
+import { BASE_URL } from '../../constants/Constants'
 
 function LoginPage() {
 
@@ -16,17 +17,18 @@ function LoginPage() {
     const onSubmitLogin = (e) => {
         e.preventDefault()
 
-        const headers = {
-            'Content-Type' : 'application/json',
-        }
-        axios.post('https://us-central1-labenu-apis.cloudfunctions.net/labeX/andre-marques-carver/login', form, headers)
+        axios.post(`${BASE_URL}login`, form, {
+            headers: {
+                'Content-Type' : 'application/json'
+            }
+        })
         .then((res) => {
             localStorage.setItem('token', res.data.token)
             history.push('/AdminHome')
             cleanFields()
         })
         .catch((err) => {
-            console.log('Deu errado', err.response.data)
+            alert(err.response.data)
         })
     }
 

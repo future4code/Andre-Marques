@@ -1,10 +1,9 @@
 import { useHistory } from 'react-router'
-import { DivMain, DivHeader, DivFooter, FormCreateTrip} from './Styled'
+import { DivMain, DivHeader, FormCreateTrip} from './Styled'
 import { useEffect } from 'react'
-import { PLANETS } from '../../constants/Constants'
+import { BASE_URL, PLANETS } from '../../constants/Constants'
 import useForm from '../../hooks/useForm'
 import axios from 'axios'
-import { useState } from 'react/cjs/react.development'
 
 function CreateTripPage() {
 
@@ -27,17 +26,17 @@ function CreateTripPage() {
     const onSubmitCreateTrip = (e) => {
         e.preventDefault()
 
-        axios.post('https://us-central1-labenu-apis.cloudfunctions.net/labeX/andre-marques-carver/trips', form, {
+        axios.post(`${BASE_URL}trips`, form, {
             headers: {
                 auth: token
             }
         })
         .then((res) => {
-            console.log(res.data)
+            alert("Viagem criada com sucesso!")
             cleanFields()
         })
         .catch((err) => {
-            console.log(err.response.data)
+            alert(err.response.data)
         })
     }
 
@@ -62,10 +61,6 @@ function CreateTripPage() {
                 <input required placeholder="Duracao em dias" type="number" name="durationInDays" value={form.durationInDays} onChange={handleInputs}></input>
                 <button>Criar</button>
             </FormCreateTrip>
-
-            <DivFooter>
-               
-            </DivFooter>
 
         </DivMain>
     )

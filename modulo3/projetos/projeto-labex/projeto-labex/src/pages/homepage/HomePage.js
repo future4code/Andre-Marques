@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useHistory } from "react-router-dom"
 import { useEffect } from "react/cjs/react.development"
-import { DivMain} from "./Styled"
+import { DivMain, DivTitle} from "./Styled"
 
 function HomePage() {
 
@@ -17,9 +17,9 @@ function HomePage() {
 
     return (
         <DivMain>
-            <div>
+            <DivTitle>
                 <h1>LabeX</h1>
-            </div>
+            </DivTitle>
 
             <div>
                 <button onClick={goToListTripPage}>Ver Viagens</button>

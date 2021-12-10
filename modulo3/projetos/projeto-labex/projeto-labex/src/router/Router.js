@@ -9,6 +9,8 @@ import CreateTripPage from "../pages/createtrippage/CreatetripPage"
 import ListTripsPage from "../pages/listtripspage/ListTripsPage"
 
 const DivBody = styled.div`
+  margin: 0;
+  padding: 0;
   height: 100vh;
   width: 100vw;
 `
@@ -16,7 +18,7 @@ const DivBody = styled.div`
 const Router = () => {
     return (
         <BrowserRouter>
-      <DivBody>
+      {/* <DivBody> */}
         <Switch>
           <Route exact path="/">
             <HomePage />
@@ -46,7 +48,7 @@ const Router = () => {
             <ListTripsPage />
           </Route>
         </Switch>
-      </DivBody>
+      {/* </DivBody> */}
     </BrowserRouter>
     )
 }

@@ -5,24 +5,32 @@ export const DivMain = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    width: 1550px;
+    width: 100vw;
     height: 100vh;
 `
 export const DivHeader = styled.div`
-    border: 1px solid black;
+    box-shadow: 5px 5px 5px black;
+    border-radius: 25px 5px;
     display: flex;
     align-items: center;
     height: 100px;
-    width: 100%;
+    width: 350px;
+    justify-content: space-evenly;
+    background-image: linear-gradient(to bottom, red, yellow);
+
+    button{
+        margin: 0 10px;
+    }
 `
 
 export const Form = styled.form`
     display: flex;
     flex-direction: column;
     margin-top: 30px;
-    height: 100%;
     align-items: center;
     justify-content: center;
+    height: 700px;
+}
 
     select {
         margin: 10px;
