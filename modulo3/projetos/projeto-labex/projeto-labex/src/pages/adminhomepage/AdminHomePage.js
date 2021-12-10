@@ -43,9 +43,6 @@ function AdminHomePage() {
                 alert(err.response.data)
             })
         }
-        
-        
-
     }
 
     useEffect(() => {

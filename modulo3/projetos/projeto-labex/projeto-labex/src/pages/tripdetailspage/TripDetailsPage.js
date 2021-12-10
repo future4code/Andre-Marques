@@ -15,7 +15,7 @@ function TripDetailsPage() {
         history.goBack()
     }
 
-    useEffect(() => {
+    const getTripDetails = () => {
         axios.get(`${BASE_URL}trip/${params.id}`, {
             headers: {
                 auth: token
@@ -27,6 +27,10 @@ function TripDetailsPage() {
         .catch((err) => {
             alert(err.response.data)
         })
+    }
+
+    useEffect(() => {
+        getTripDetails()
     }, [params.id])
        
     const approveCandidate = (id, value) => {
@@ -38,10 +42,11 @@ function TripDetailsPage() {
         axios.put(`${BASE_URL}trips/${trip.id}/candidates/${id}/decide`, body, {
             headers: {
                 auth: token,
-                // 'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             }
         })
         .then((res) => {
+            getTripDetails()
             if(value === true){
                 alert("Candidato aprovado!")
             } else {
@@ -52,10 +57,6 @@ function TripDetailsPage() {
             alert(err.response.data.message)
         })
     }
-
-    useEffect(() => {
-        renderCandidates()
-    }, [trip.candidates])
 
     const renderCandidates = () => {
         return(
