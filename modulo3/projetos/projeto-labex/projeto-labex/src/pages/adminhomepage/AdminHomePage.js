@@ -1,55 +1,21 @@
-import styled from 'styled-components'
 import { useHistory } from 'react-router'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-
-const DivMain = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    height: 100vh;
-`
-const DivHeader = styled.div`
-    border: 1px solid black;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 100px;
-    width: 100%;
-`
-
-const DivListaViagens = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: start;
-    height: 100%;
-    width: 100%;
-`
-
-const DivFooter = styled.div`
-    border: 1px solid black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    width: 100%;
-`
+import { DivMain, DivHeader, DivTripList, DivFooter } from './Styled'
 
 function AdminHomePage() {
 
-    const [tripDetail, setTripDetail] = useState()
     const [listTrips, setListTrips] = useState([])
+    const [newToken, setNewToken] = useState('')
 
     const history = useHistory()
 
     const goToHomePage = () => {
-        history.goBack()
+        history.push('/')
     }
 
     const goToLoginPage = () => {
+        localStorage.clear()
         history.push("/Login")
     }
 
@@ -61,6 +27,32 @@ function AdminHomePage() {
         history.push(`/TripDetails/${id}`)
     }
 
+    const deleteTrip = (id) => {
+        
+        axios.delete(`https://us-central1-labenu-apis.cloudfunctions.net/labeX/andre-marques-carver/trips/${id}`, {
+            headers: {
+                auth: newToken, 
+                'Content-Type': 'application/json'
+            }
+        })
+        .then((res) => {
+            console.log(res.data)
+        })
+        .catch((err) => {
+            console.log(err.response.data)
+        })
+
+    }
+
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        setNewToken(token)
+
+        if(token === null){
+            history.push('/Login')
+        }
+    }, [])
+
     useEffect(() => {
         axios.get('https://us-central1-labenu-apis.cloudfunctions.net/labeX/andre-marques-carver/trips')
         .then((res) => {
@@ -69,7 +61,7 @@ function AdminHomePage() {
         .catch((err) => {
             console.log(err.response.data)
         })
-    }, [])
+    }, [listTrips])
 
     return (
         <DivMain>
@@ -79,19 +71,19 @@ function AdminHomePage() {
                 <button onClick={goToLoginPage}>Sair</button>
             </DivHeader>
 
-            <DivListaViagens>
+            <DivTripList>
                 {listTrips && listTrips.map((trip, index) => {
                     return (
                         <ul key={index}>
                             <div>
                             <li>{trip.name}</li>
                             <button onClick={() => getTripDetail(trip.id)}>Ver</button>
-                            <button>Excluir</button>
+                            <button onClick={() => deleteTrip(trip.id)}>Excluir</button>
                             </div>
                         </ul>
                     )
                 })}
-            </DivListaViagens>
+            </DivTripList>
 
             <DivFooter>
                 <button onClick={goToCreateTripPage}>Criar Viagem</button>

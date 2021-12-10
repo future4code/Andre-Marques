@@ -1,26 +1,18 @@
-import React from "react"
-import styled from "styled-components"
+import React, { useState } from "react"
 import { useHistory } from "react-router-dom"
-
-const DivMain = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    height: 100vh;
-`
+import { useEffect } from "react/cjs/react.development"
+import { DivMain} from "./Styled"
 
 function HomePage() {
 
     const history = useHistory()
 
     const goToListTripPage = () => {
-        history.push("/ListTrips")
+       history.push("/TripList")
     }
 
-    const goToLoginPage = () => {
-        history.push("/Login")
+    const goToLoginPage = (token) =>{
+        history.push('/Login')
     }
 
     return (

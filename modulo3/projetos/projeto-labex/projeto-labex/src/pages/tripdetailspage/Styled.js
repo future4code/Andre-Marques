@@ -5,9 +5,7 @@ export const DivMain = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    width: 100vw;
-    height: 100vh;
+    justify-content: space-between;  
 `
 export const DivHeader = styled.div`
     border: 1px solid black;
@@ -28,7 +26,29 @@ export const DivViagem = styled.div`
     width: 100%;
 `
 
-export const DivListaViagens = styled.div`
+export const DivTripList = styled.div`
+    border: 1px solid black;
     display: flex;
-
+    flex-direction: column;
+    align-items: flex-start;
+    width: 400px;
 ` 
+
+export const DivPeopleList = styled.div`
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 400px;
+` 
+
+export const DivButton = styled.div`
+border: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+   
+    button{
+        margin: 10px;
+    }
+`

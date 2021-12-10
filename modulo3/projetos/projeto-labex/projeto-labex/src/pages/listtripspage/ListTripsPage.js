@@ -1,35 +1,7 @@
 import axios from 'axios'
 import React, {useState, useEffect} from 'react'
 import { useHistory } from 'react-router'
-import styled from 'styled-components'
-
-const DivMain = styled.div`
-border: 1px solid black;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    width: 100vw;
-    height: 100vh;
-`
-const DivHeader = styled.div`
-    border: 1px solid black;
-    display: flex;
-    align-items: center;
-    height: 100px;
-    width: 100%;
-`
-
-const DivFooter = styled.div`
-    border: 1px solid black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    width: 100%;
-`
-
-
+import { DivMain, DivHeader, DivFooter, DivTripList } from './Styled'
 
 function ListTripsPage() {
 
@@ -37,7 +9,7 @@ function ListTripsPage() {
     const [trips, setTrips] = useState([])
 
     const goToHomePage = () => {
-        history.goBack()
+        history.push('/')
     }
 
     const goToApplicationFormPage = () => {
@@ -67,13 +39,13 @@ function ListTripsPage() {
 
             {trips.map((trip) => {
                 return (
-                    <div key={trip.id}>
+                    <DivTripList key={trip.id}>
                         <p>Nome: {trip.name}</p>
                         <p>Descricao: {trip.description}</p>
                         <p>Planeta: {trip.planet}</p>
                         <p>Duracao: {trip.durationInDays}</p>
                         <p>Data: {trip.date}</p>
-                </div> 
+                    </DivTripList> 
                 )
             })}
 

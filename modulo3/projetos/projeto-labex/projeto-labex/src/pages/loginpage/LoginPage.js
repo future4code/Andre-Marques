@@ -1,70 +1,44 @@
-import styled from 'styled-components'
 import { useHistory } from 'react-router'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-
-const DivMain = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    width: 1550px;
-    height: 100vh;
-`
-const DivHeader = styled.div`
-    border: 1px solid black;
-    display: flex;
-    align-items: center;
-    height: 100px;
-    width: 100%;
-`
-
-const DivInput = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-
-    input{
-        margin-top: 15px;
-    }
-`
+import { DivMain, DivHeader, DivInput } from './Styled'
+import useForm from '../../hooks/useForm'
 
 function LoginPage() {
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-
     const history = useHistory()
+    const {form, handleInputs, cleanFields} = useForm({email: "", password: ""})
 
     const goToHomePage = () => {
-        history.goBack()
+        history.push('/')
     }
 
-    const onSubmitLogin = () => {
-        const body = {
-            email: email,
-            password: password
+    const onSubmitLogin = (e) => {
+        e.preventDefault()
+
+        const headers = {
+            'Content-Type' : 'application/json',
         }
-        axios.post('https://us-central1-labenu-apis.cloudfunctions.net/labeX/andre-marques-carver/login', body)
+        axios.post('https://us-central1-labenu-apis.cloudfunctions.net/labeX/andre-marques-carver/login', form, headers)
         .then((res) => {
-            console.log('Deu certo', res.data)
             localStorage.setItem('token', res.data.token)
             history.push('/AdminHome')
+            cleanFields()
         })
         .catch((err) => {
             console.log('Deu errado', err.response.data)
         })
     }
 
-    const handleEmail = (e) => {
-        setEmail(e.target.value)
-    }
+    useEffect(() => {
+        const token = localStorage.getItem('token')
 
-    const handlePassword = (e) => {
-        setPassword(e.target.value)
-    }
+        if(token !== null){
+            history.push('/AdminHome')
+        }
+    }, [])
+
+    
 
     return (
         <DivMain>
@@ -74,9 +48,11 @@ function LoginPage() {
             </DivHeader>
 
             <DivInput>
-                <input placeholder="Email" value={email} onChange={handleEmail}></input>
-                <input placeholder="Senha" value={password} onChange={handlePassword}></input>
-                <button onClick={onSubmitLogin}>Entrar</button>
+                <form onSubmit={onSubmitLogin}>
+                    <input required type="email" placeholder="Email" name="email" value={form.email} onChange={handleInputs}></input>
+                    <input pattern={'^.{3,}$'} le={'Sua senha deve ter mo mínimo 3 caracteres'} required type="password" placeholder="Senha" name="password" value={form.password} onChange={handleInputs}></input>
+                    <button>Entrar</button>
+                </form>
             </DivInput>
 
         </DivMain>

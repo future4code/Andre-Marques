@@ -42,7 +42,7 @@ const Router = () => {
             <CreateTripPage />
           </Route>
 
-          <Route exact path="/ListTrips">
+          <Route exact path="/TripList">
             <ListTripsPage />
           </Route>
         </Switch>

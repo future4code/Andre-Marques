@@ -1,62 +1,26 @@
 import React, {useState, useEffect} from 'react'
-import styled from 'styled-components'
 import { useHistory } from 'react-router'
 import axios from 'axios'
 import { COUNTRIES } from '../../constants/Constants'
-
-const DivMain = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    width: 1550px;
-    height: 100vh;
-`
-const DivHeader = styled.div`
-    border: 1px solid black;
-    display: flex;
-    align-items: center;
-    height: 100px;
-    width: 100%;
-`
-
-const DivFormulario = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin-top: 30px;
-    height: 100%;
-
-    select, input{
-        margin-top: 15px;
-        width: 300px;
-        height: 30px;
-    }
-`
+import { DivMain, DivHeader, Form } from './Styled'
+import useForm from '../../hooks/useForm'
 
 function ApplicationFormPage() {
 
     const history = useHistory()
     const [listTrips, setListTrips] = useState([])
     const [trip, setTrip] = useState()
-    const [name, setName] = useState()
-    const [age, setAge] = useState()
-    const [text, setText] = useState()
-    const [profession, setProfession] = useState()
-    const [country, setCountry] = useState()
     const [id, setId] = useState()
-    const headers = {
-        'Content-Type' : 'application/json'
-    }
-    const body = {
-        name: name,
-        age: age,
-        applicationText: text,
-        profession: profession,
-        country: country
-    }
+    const {form, handleInputs, cleanFields} = useForm({
+        name: "",
+        age: "",
+        applicationText: "",
+        profession: "",
+        country: ""
+    })
 
     const goToListTripsPage = () => {
-        history.goBack()
+        history.push('/TripList')
     }
 
     const handleTrip = (e) => {
@@ -69,36 +33,18 @@ function ApplicationFormPage() {
         })
     }
 
-    const handleName = (e) => {
-        setName(e.target.value)
-    }
-    
-    const handleAge = (e) => {
-        setAge(e.target.value)
-    }
+    const onSubmitApplication = (e) => {
+        e.preventDefault()
 
-    const handleText = (e) => {
-        setText(e.target.value)
-    }
-    
-    const handleProfession = (e) => {
-        setProfession(e.target.value)
-    }
+        const headers = {
+            'Content-Type' : 'application/json'
+        }
 
-    const handleCountry = (e) => {
-        setCountry(e.target.value)
-    }
-
-    const sendApplication = () => {
-        axios.post(`https://us-central1-labenu-apis.cloudfunctions.net/labeX/andre-marques-carver/trips/${id}/apply`, body, headers)      
+        axios.post(`https://us-central1-labenu-apis.cloudfunctions.net/labeX/andre-marques-carver/trips/${id}/apply`, form, headers)      
         .then((res) =>{
             console.log(res.data)
             setTrip("")
-            setName("")
-            setAge("")
-            setText("")
-            setProfession("")
-            setCountry("")
+            cleanFields()
         })
         .catch((err) => {
             console.log(err.response.data.message)
@@ -122,23 +68,24 @@ function ApplicationFormPage() {
                 <button onClick={goToListTripsPage}>Voltar</button>
             </DivHeader>
 
-            <DivFormulario>
+            <Form onSubmit={onSubmitApplication}>
                 <select value={trip} onChange={handleTrip}>
                     {listTrips.map((trip, index) => {
-                        return <option key={index} placeholder="Selecione uma viagem">{trip.name}</option>
+                        return <option key={index}>{trip.name}</option>
                     })}
                 </select>
-                <input placeholder="Nome" value={name} onChange={handleName}></input>
-                <input placeholder="Idade" value={age} onChange={handleAge}></input>
-                <input placeholder="Texto" value={text} onChange={handleText}></input>
-                <input placeholder="Profissao" value={profession} onChange={handleProfession}></input>
-                <select name="" value={country} onChange={handleCountry}>
+                <input required type="text" placeholder="Nome" name='name' value={form.name} onChange={handleInputs}></input>
+                <input required type="number" placeholder="Idade" name='age' value={form.age} onChange={handleInputs}></input>
+                <input required type="text" placeholder="Texto" name='applicationText' value={form.applicationText} onChange={handleInputs}></input>
+                <input required type="text" placeholder="Profissao" name='profession' value={form.profession} onChange={handleInputs}></input>
+                <select required name="country" onChange={handleInputs}>
+                    <option selected disabled>Selecione um País</option>
                     {COUNTRIES.map((country, index) => {
-                        return <option key={index}>{country}</option>
+                        return <option key={index} value={country}>{country}</option>
                     })}
                 </select>
-                <button onClick={sendApplication}>Enviar</button>
-            </DivFormulario>
+                <button>Enviar</button>
+            </Form>
 
         </DivMain>
     )
