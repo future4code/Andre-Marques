@@ -9,7 +9,6 @@ function ApplicationFormPage() {
 
     const history = useHistory()
     const [listTrips, setListTrips] = useState([])
-    const [trip, setTrip] = useState()
     const [id, setId] = useState()
     const {form, handleInputs, cleanFields} = useForm({
         name: "",
@@ -24,7 +23,6 @@ function ApplicationFormPage() {
     }
 
     const handleTrip = (e) => {
-        setTrip(e.target.value)
         listTrips.map((trip) => {
             if(e.target.value === trip.name){
                 setId(trip.id)
@@ -43,12 +41,17 @@ function ApplicationFormPage() {
         })      
         .then((res) =>{
             alert("Registro efetuado com sucesso")
-            setTrip("")
             cleanFields()
+            history.push('/TripList')
+            
         })
         .catch((err) => {
             alert(err.response.data.message)
         })
+    }
+
+    const TripListMap = () => {
+        
     }
 
     useEffect(() => {
@@ -75,16 +78,62 @@ function ApplicationFormPage() {
                         return <option key={index}>{trip.name}</option>
                     })}
                 </select>
-                <input required type="text" placeholder="Nome" name='name' value={form.name} onChange={handleInputs}></input>
-                <input required type="number" placeholder="Idade" name='age' value={form.age} onChange={handleInputs}></input>
-                <input required type="text" placeholder="Texto" name='applicationText' value={form.applicationText} onChange={handleInputs}></input>
-                <input required type="text" placeholder="Profissao" name='profession' value={form.profession} onChange={handleInputs}></input>
-                <select required name="country" onChange={handleInputs}>
+                <input
+                    required
+                    type="text"
+                    placeholder="Nome"
+                    name='name'
+                    value={form.name}
+                    onChange={handleInputs}
+                    pattern={'^.{2,}'}
+                    title={'Insira um texto com pelo menos 2 caracteres'}
+                >
+                </input>
+
+                <input
+                    required
+                    type="number"
+                    placeholder="Idade"
+                    name='age'
+                    value={form.age}
+                    onChange={handleInputs}
+                    min={18}
+                >
+                </input>
+
+                <input
+                    required
+                    type="text"
+                    placeholder="Texto"
+                    name='applicationText'
+                    value={form.applicationText}
+                    onChange={handleInputs}
+                    pattern={'^.{15,}'}
+                    title={'Insira um texto com pelo menos 15 caracteres'}
+                >
+                </input>
+
+                <input
+                    required
+                    type="text"
+                    placeholder="Profissao"
+                    name='profession'
+                    value={form.profession}
+                    onChange={handleInputs}
+                >
+                </input>
+
+                <select
+                    required
+                    name="country"
+                    onChange={handleInputs}
+                >
                     <option selected disabled>Selecione um País</option>
                     {COUNTRIES.map((country, index) => {
                         return <option key={index} value={country}>{country}</option>
                     })}
                 </select>
+
                 <button>Enviar</button>
             </Form>
 

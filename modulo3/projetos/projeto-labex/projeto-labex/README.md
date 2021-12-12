@@ -29,7 +29,7 @@ O site permite a inscrição do consumidor em uma de nossas viagens disponíveis
 
 Nesse projeto do LabeX eu pude utilizar todos os conhecimentos ensinados em aula, e ainda que alguns temas tenham ficado meio vago pra mim, vou procurar entende-los melhor para dar continuidade no meu aprendizado.
 
-O site do Astromatch pode ser acessado pelo link: https://unbecoming-oranges.surge.sh
+O site do Astromatch pode ser acessado pelo link: https://spotted-theory.surge.sh/
  
  Login: andremarks99@gmail.com.br
  Password: 123456

@@ -34,6 +34,7 @@ function CreateTripPage() {
         .then((res) => {
             alert("Viagem criada com sucesso!")
             cleanFields()
+            history.push('/AdminHome')
         })
         .catch((err) => {
             alert(err.response.data)
@@ -48,17 +49,61 @@ function CreateTripPage() {
             </DivHeader>
 
             <FormCreateTrip onSubmit={onSubmitCreateTrip}>
-                <input required placeholder="Nome" type="text" name="name" value={form.name} onChange={handleInputs}></input>
-                <select required name="planet" onChange={handleInputs}>
+                <input
+                    required
+                    placeholder="Nome"
+                    type="text" name="name"
+                    value={form.name}
+                    onChange={handleInputs}
+                    pattern={'^.{5,}'}
+                    title={'Insira um texto com pelo menos 5 caracteres'}
+                >
+                </input>
+
+                <select
+                    required
+                    name="planet"
+                    onChange={handleInputs}
+                >
                     <option selected disabled>Selecione um Planeta</option>
                     {PLANETS.map((planet, index) => {
                     return <option value={planet} key={index}>{planet}</option>
                 })}
                 </select>
-                {/* <input required placeholder='Planeta' type="text" name="planet" value={form.planet} onChange={handleInputs}></input> */}
-                <input required placeholder="Data" type="date" name="date" value={form.date} onChange={handleInputs}></input>
-                <input required placeholder="Descricao" type="text" name="description" value={form.description} onChange={handleInputs}></input>
-                <input required placeholder="Duracao em dias" type="number" name="durationInDays" value={form.durationInDays} onChange={handleInputs}></input>
+
+                <input
+                    required
+                    placeholder="Data"
+                    type="date"
+                    name="date"
+                    value={form.date}
+                    onChange={handleInputs}
+                >
+                </input>
+
+                <input
+                    required
+                    placeholder="Descricao"
+                    type="text"
+                    name="description"
+                    value={form.description}
+                    onChange={handleInputs}
+                    pattern={'^.{15,}'}
+                    title={'Insira um texto com pelo menos 15 caracteres'}
+                >
+                </input>
+
+                <input
+                    required
+                    placeholder="Duração em dias"
+                    type="number"
+                    name="durationInDays"
+                    value={form.durationInDays}
+                    onChange={handleInputs}
+                    min={3}
+                >
+                </input>
+
                 <button>Criar</button>
             </FormCreateTrip>
 
