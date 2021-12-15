@@ -1,10 +1,15 @@
-import react from "react"
+import useProtectedPage from "../../hooks/useProtectedPage"
+import { DivContainer } from "./Styled"
+import { Typography } from "@material-ui/core"
 
 const ErrorPage = () => {
+
+    useProtectedPage()
+
     return (
-        <div>
-            <h1>ErrorPage</h1>
-        </div>
+        <DivContainer>
+            <Typography color="primary" variant="h4" align="center">ErrorPage</Typography>
+        </DivContainer>
     )
 }
 

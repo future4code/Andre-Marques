@@ -4,17 +4,33 @@ import { StyledToolbar } from './Styled';
 import { useNavigate } from 'react-router-dom'
 import { goToLogin, goToFeed} from '../../router/coordinator'
 
-
-export default function ButtonAppBar() {
+const Header = ({rightButtonText, setRightButtonText}) => {
     
+    const token = localStorage.getItem('token')
     const navigate = useNavigate()
+
+    const logout = () => {
+        localStorage.removeItem('token')
+    }
+
+    const rightButtonAction = () => {
+        if(token){
+            logout() 
+            setRightButtonText('Login')
+            goToLogin(navigate)
+        } else {
+            goToLogin(navigate)
+        }
+    }
 
     return (
         <AppBar position="static">
             <StyledToolbar>
-            <Button onClick={() => goToFeed(navigate)} color="inherit">LabEddit</Button>
-            <Button onClick={() => goToLogin(navigate)} color="inherit">Login</Button>
+                <Button onClick={() => goToFeed(navigate)} color="inherit">LabEddit</Button>
+                <Button onClick={rightButtonAction} color="inherit">{rightButtonText}</Button>
             </StyledToolbar>
         </AppBar>
   )
 }
+
+export default Header

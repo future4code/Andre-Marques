@@ -2,43 +2,56 @@ import { DivInput, Form} from './Styled'
 import useForm from "../../hooks/useForm"
 import {StyledTextField, StyledButton} from '../LoginPage/Styled'
 import { useNavigate } from "react-router-dom"
-import { login } from '../../services/users'
+import { signUp } from '../../services/users'
 
-const LoginForm = ({setRightButtonText}) => {
+const SignUpForm = ({setRightButtonText}) => {
 
     const navigate = useNavigate()
 
-    const [form, handleInputChange, clear] = useForm({email: "", password: ""})
+    const [form, handleInputChange, clear] = useForm({username: "", email: "", password: ""})
 
     const OnSubmitForm = (e) => {
         e.preventDefault()
-        login(form, clear, navigate, setRightButtonText)
+        signUp(form, clear, navigate, setRightButtonText)
     }
 
     return (
         <DivInput>
             <Form onSubmit={OnSubmitForm}>
                 <StyledTextField
-                    name="email"
-                    value={form.email}
+                    name="username"
+                    value={form.username}
                     onChange={handleInputChange}
                     required
-                    autoFocus
-                    placeholder="email"
+                    placeholder="Nome"
                     variant="outlined"
+                    autoFocus
                     fullWidth
                 >
                 </StyledTextField>
                 
                 <StyledTextField
+                    name="email"
+                    value={form.email}
+                    onChange={handleInputChange}
+                    required
+                    placeholder="E-mail"
+                    variant="outlined"
+                    fullWidth
+                >
+                </StyledTextField>
+
+                <StyledTextField
                     name="password"
                     value={form.password}
                     onChange={handleInputChange}
-                    type="password"
                     required
-                    placeholder="password"
+                    placeholder="Senha"
                     variant="outlined"
                     fullWidth
+                    type="password"
+                    min={8}
+                    max={30}
                 >
                 </StyledTextField>
                 
@@ -48,12 +61,11 @@ const LoginForm = ({setRightButtonText}) => {
                     variant="contained"
                     color="primary"
                 >
-                    Login
+                    Cadastrar
                 </StyledButton>
-
                 </Form>
         </DivInput>
     )
 }
 
-export default LoginForm
+export default SignUpForm
