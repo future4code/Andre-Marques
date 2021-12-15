@@ -7,6 +7,7 @@ import { BASE_URL } from '../../constants/Constants'
 function AdminHomePage() {
 
     const [listTrips, setListTrips] = useState([])
+    const [cont, setCont] = useState(0)
     const [newToken, setNewToken] = useState('')
 
     const history = useHistory()
@@ -38,6 +39,7 @@ function AdminHomePage() {
             })
             .then((res) => {
                 alert("Viagem deletada com sucesso!")
+                setCont(cont + 1)
             })
             .catch((err) => {
                 alert(err.response.data)
@@ -58,11 +60,12 @@ function AdminHomePage() {
         axios.get('https://us-central1-labenu-apis.cloudfunctions.net/labeX/andre-marques-carver/trips')
         .then((res) => {
             setListTrips(res.data.trips)
+            console.log(res.data.trips)
         })
         .catch((err) => {
             alert(err.response.data)
         })
-    }, [listTrips])
+    }, [cont])
 
     return (
         <DivMain>
