@@ -144,20 +144,29 @@ app.delete("/todo/:id", (req:Request, res:Response) => {
 
 app.get("/todo/:id", (req:Request, res:Response) => {
   const toDoUserId = Number(req.params.id)
-  const newArray:toDo[] = []
+  const newArray = ""
 
   if(!toDoUserId){
     res.status(400).send("It is missing a parameter!")
   }
   
-  for(let i = 0; i < toDoArray.length; i++){
-    if(toDoArray[i].userId === toDoUserId){
-      newArray.push(toDoArray[i])
-    }
-  }
+  // for(let i = 0; i < toDoArray.length; i++){
+  //   if(toDoArray[i].userId === toDoUserId){
+  //     newArray.push(toDoArray[i])
+  //     toDoArray.splice(i, 1)
+  //   }
+  // }
+
+  const selectedUser = toDoArray.filter((item) => {
+    return item.userId === toDoUserId
+  })
+
+  const others = toDoArray.filter((item) => {
+    return item.userId !== toDoUserId
+  })
 
   res.status(200).send({
-    result: newArray
+    todos: [{selectedUser: selectedUser}, {others: others}]
   })
 })
 
