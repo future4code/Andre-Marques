@@ -151,7 +151,7 @@ app.get("/posts/:id", (req, res) => {
     const userId = Number(req.params.id)
 
     if(!userId){
-        res.status(400).send("It is missing parameters!")
+        res.status(400).send("It is missing a parameter!")
     }
 
     const idPosts: Post[] = posts.filter((post) => {
@@ -161,3 +161,30 @@ app.get("/posts/:id", (req, res) => {
     })
     res.status(200).send(idPosts).end()
 })
+
+app.delete("/posts/:idPost", (req, res) => {
+    const postId = Number(req.params.idPost)
+
+    if(!postId) {
+        res.status(400).send("It is missing a parameter!")
+    }
+
+    const arrayPosts = [...posts.filter((post) => {
+        return post.id !== postId 
+    })]
+    res.status(200).send(arrayPosts)
+})
+
+app.delete("/users/:idUser", (req, res) => {
+    const userId = Number(req.params.idUser)
+
+    if(!userId) {
+        res.status(400).send("It is missing a parameter!")
+    }
+
+    const arrayUsers = [...users.filter((user) => {
+        return user.id !== userId 
+    })]
+    res.status(200).send(arrayUsers)
+})
+
