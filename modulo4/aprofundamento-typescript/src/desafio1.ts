@@ -17,6 +17,6 @@ function compare(a:Consultas,b:Consultas):number {
     if (a.nome > b.nome)
       return 1;
     return 0;
-  }
+}
 
   console.log(agenda.sort(compare))
