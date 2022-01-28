@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express"
 import cors from "cors"
-import { users, UserType } from "./data" 
+import { users, UserType, User } from "./data" 
 
 import { AddressInfo } from "net"
 
@@ -18,108 +18,78 @@ const server = app.listen(process.env.PORT || 3003, () => {
   }
 })
 
-type User = {
-    id:number,
-    name:string,
-    email:string,
-    type:UserType,
-    age:number
-}
-
-
 // 1- a) GET
 //     b) users   
 
-// app.get("/users", (req:Request, res:Response) => {
-//     let errorCode = 400
-//     try{
+app.get("/users", (req:Request, res:Response) => {
+    let errorCode = 400
+    try{
 
-//     if(!users){
-//         errorCode = 404
-//         throw new Error("The users were not found!")
-//     }
+    if(!users){
+        errorCode = 404
+        throw new Error("The users were not found!")
+    }
 
-//     res.status(200).send(users)
+    res.status(200).send(users)
 
-//    } catch(error: any){
+   } catch(error: any){
 
-//     res.status(errorCode). send(error.message)
+    res.status(errorCode). send(error.message)
 
-//    }
-// })
-
+   }
+})
 
 // 2- a) Query, porque o endpoint GET nao aceita body.
 //    b) Sim.
-
-// app.get("/users", (req:Request, res:Response) => {
-//     let errorCode = 400
-//     const type:UserType = req.query.type as UserType
-    
-//     try{
-
-//         if(!type){
-//             errorCode = 422
-//             throw new Error("It is missing a parameter")
-//         }
-
-//         const machtedType:User[] = users.filter((user) => user.type === type)
-
-//         if(type !== UserType.ADMIN || UserType.NORMAL){
-//             errorCode = 422
-//             throw new Error("The parameter is not valid")
-//         }
-    
-//         res.status(200).send(machtedType)
-    
-//        } catch(error: any){
-    
-//         res.status(errorCode). send(error.message)
-    
-//        }
-// })
-
 // 3- a) Query
 //    b) 
 
-app.get("/users", (req:Request, res:Response) => {
+app.get("/users/user", (req:Request, res:Response) => {
     let errorCode = 400
-    let user:User[] = []
+    const type:UserType = req.query.type as UserType 
+    const name:string = req.query.name as string 
     let isUserFound = false
+    
     try{
 
-        const name:string = req.query.name as string
-
-        if(!name){
+        if(!type && !name){
             errorCode = 422
             throw new Error("It is missing a parameter")
         }
 
-        for(let i = 0; i < users.length; i++){
-            if(users[i].name.toLowerCase() === name.toLowerCase()){
-                user.push(users[i])
-                isUserFound = true
+        if(type){
+            if(type !== UserType.ADMIN && type !== UserType.NORMAL){
+                errorCode = 422
+                throw new Error("The parameter is not valid")
             }
+
+            const machtedType:User[] = users.filter((user) => user.type === type)
+            isUserFound = true
+            res.status(200).send(machtedType)
+        }
+
+        if(name){
+            const matchedName:User[] = users.filter((user) => user.name.toLowerCase() === name.toLowerCase())
+            isUserFound = true
+            res.status(200).send(matchedName)
         }
 
         if(!isUserFound){
             errorCode = 404
             throw new Error("The user was not found!")
         }
-
-        res.status(200).send(user)
-
-   } catch(error:any){
-
-        res.status(errorCode).send(error.message)
-
-   }
+    
+       } catch(error: any){
+    
+        res.status(errorCode). send(error.message)
+    
+       }
 })
 
 // 4- a) Nada
 //    b) Sim, porém nao segue as boas praticas.
 
-app.put("/users", (req:Request, res:Response) => {
+app.post("/users", (req:Request, res:Response) => {
     let errorCode = 400
 
     try{
@@ -134,6 +104,92 @@ app.put("/users", (req:Request, res:Response) => {
         users.push({id, name, email, type, age})
 
         res.status(200).send(users)
+
+   } catch(error:any){
+
+        res.status(errorCode).send(error.message)
+
+   }
+})
+
+//5- 
+
+app.put("/users/:id", (req:Request, res:Response) => {
+    let errorCode = 400
+
+    try{
+
+        const userId = Number(req.params.id)
+        const userName = req.query.name
+
+        if(!userId || !userName){
+            errorCode = 422
+            throw new Error("It is missing a parameter")
+        }
+
+        for(let i = 0; i < users.length; i++){
+            if(users[i].id === userId){
+                users[i].name = `${userName} - ALTERADO`
+            }
+        }
+
+        res.status(200).send()
+
+   } catch(error:any){
+
+        res.status(errorCode).send(error.message)
+
+   }
+})
+
+//6- 
+
+app.patch("/users/:id", (req:Request, res:Response) => {
+    let errorCode = 400
+
+    try{
+
+        const userId = Number(req.params.id)
+        const userName = req.query.name
+
+        if(!userId || !userName){
+            errorCode = 422
+            throw new Error("It is missing a parameter")
+        }
+
+        for(let i = 0; i < users.length; i++){
+            if(users[i].id === userId){
+                if(users[i].name.includes("ALTERADO"))
+                users[i].name = `${userName} - REALTERADO`
+            }
+        }
+
+        res.status(200).send(users)
+
+   } catch(error:any){
+
+        res.status(errorCode).send(error.message)
+
+   }
+})
+
+//7- 
+
+app.delete("/users/:id", (req:Request, res:Response) => {
+    let errorCode = 400
+
+    try{
+
+        const userId = Number(req.params.id)
+
+        if(!userId){
+            errorCode = 422
+            throw new Error("It is missing a parameter")
+        }
+
+        const unmacthedId = users.filter((user) => user.id !== userId)
+
+        res.status(200).send(unmacthedId)
 
    } catch(error:any){
 
