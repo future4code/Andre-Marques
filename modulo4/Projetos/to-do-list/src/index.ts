@@ -77,6 +77,11 @@ app.get("/user/:id", async (req:Request, res:Response) => {
 
         const user = await getUserById(id)  
 
+        if(user.length === 0){
+            errorCode = 404
+            throw new Error("User was not found!")
+        }
+
         res.status(200).send(user)
         
 
@@ -88,24 +93,58 @@ app.get("/user/:id", async (req:Request, res:Response) => {
 // GET ALL USERS
 
 const getUsers = async ():Promise<any> => {
-    const result = await connection("Users").select();
+    const result = await connection("Users")
+    .select("id", "nickname")
+    .from("Users")
     
     return result
 }
 
-app.get("/users", async (req:Request, res:Response) => {
+app.get("/users/all", async (req:Request, res:Response) => {
     let errorCode:number = 404
 
     try{
         
         const users = await getUsers()
-        res.status(200).send(users)
+        res.status(200).send({users:users})
     }catch(error:any){
         res.status(errorCode).send(error.message)
     }
 })
 
 
+
+
+
+// GET TASK BY AN USERID
+
+const getTaskByUserId = async (id:string):Promise<any> => {
+    const result = await connection("Users")
+        .join("Tasks", "Tasks.creatorUserId", "=", "Users.id")
+        .select("Tasks.id", "Tasks.title", "Tasks.description", "Tasks.limitDate", "Tasks.status", "Tasks.creatorUserId", "Users.nickname")
+        .where("Tasks.id", id)
+
+    return result
+}
+
+app.get("task", async (req:Request, res:Response) => {
+    let errorCode = 404
+
+    try {
+        const id = req.query.id as string
+
+        const task = await getTaskByUserId(id)
+
+        if(!id){
+            errorCode = 422
+            throw new Error("It is missing a parameter!")
+        } else{
+            res.status(200).send({tasks: task})
+        }
+    } catch (error:any) {
+        res.status(errorCode).send({message: error.message})
+    }
+})
 
 
 
@@ -148,7 +187,7 @@ app.post("/user/edit/:id", async (req:Request, res:Response) => {
 // CREATE A TASK-----------------------------------------------------------------------------------------------------
 // create an id
 
-const createTask = async (id:string, title:string, description:string, limitDate:string, status:string, creatorUserId:string):Promise<any> => {
+const createTask = async (id:string, title:string, description:string, limitDate:Date, status:string, creatorUserId:string):Promise<any> => {
     
     const result = await connection("Tasks")
         .insert({
@@ -159,6 +198,7 @@ const createTask = async (id:string, title:string, description:string, limitDate
             status:status,
             creatorUserId:creatorUserId
         }).into("Tasks")
+
     return result
 }
 
@@ -167,15 +207,23 @@ app.put("/task", async (req:Request, res:Response) => {
 
     try{
         const {title, description, limitDate, status, creatorUserId} = req.body
-        const date = limitDate.split("/").reverse().join("/")
+        // const date = limitDate.split("/").reverse().join("/")
+        const dateToStringDate = (date: Date): string => {
+            const dd = String(date.getDate()).padStart(2, '0')
+            const mm = String(date.getMonth() + 1).padStart(2, '0')
+            const yyyy = date.getFullYear()
+            return dd + '/' + mm + '/' + yyyy;
+        }
         
+    
+
         const id = Date.now().toString()
     
         if(!title || !description || !limitDate || !creatorUserId){
             errorCode = 422
             throw new Error("It is missing a parameter!")
         } else{
-            await createTask(id, title, description, date, status, creatorUserId)
+            await createTask(id, title, description, limitDate, status, creatorUserId)
 
             res.status(201).send("Task was created sucessfully!")
         }
@@ -207,6 +255,11 @@ app.get("/task/:id", async (req:Request, res:Response) => {
         const id = req.params.id
 
         const task = await getTaskById(id)
+        
+        if(task.length === 0){
+            errorCode = 404
+            throw new Error("Task was not found!")
+        }
 
         res.status(200).send(task)
 
