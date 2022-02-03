@@ -21,6 +21,43 @@ const server = app.listen(process.env.PORT || 3003, () => {
 
 
 
+// GET AN USER BY NAME OR EMAIL
+
+const getUserByNameOrEmail = async (text:string):Promise<any> =>{
+
+    const result = await connection("Users")
+        .select("id", "nickname")
+        .whereILike("nickname", `%${text}%`)
+        .orWhere("email", "like", `%${text}%`)
+        
+    return result
+}
+
+app.get("/user", async (req:Request, res:Response) => {
+    let errorCode = 404
+
+    try {
+        const text = req.query.text as string
+
+        const user = await getUserByNameOrEmail(text)
+
+        if(!text){
+            errorCode = 422
+            throw new Error("It is missing a parameter!")
+        } else{
+            res.status(200).send({users: user})
+        }
+
+        
+    } catch (error:any) {
+        res.status(errorCode).send({message: error.message})
+    }
+})
+
+
+
+
+
 // CREATE AN USER----------------------------------------------------------------------------------------------------
 // create an id
 
@@ -62,7 +99,7 @@ app.put("/user", async (req:Request, res:Response) => {
 // GET AN USER-------------------------------------------------------------------------------------------------------
 
 const getUserById = async (id:string):Promise<any> => {
-    const result:{} = await connection("Users")
+    const result = await connection("Users")
         .select("id", "nickname")
         .where("id", id);
 
@@ -122,12 +159,12 @@ const getTaskByUserId = async (id:string):Promise<any> => {
     const result = await connection("Users")
         .join("Tasks", "Tasks.creatorUserId", "=", "Users.id")
         .select("Tasks.id", "Tasks.title", "Tasks.description", "Tasks.limitDate", "Tasks.status", "Tasks.creatorUserId", "Users.nickname")
-        .where("Tasks.id", id)
+        .where("Tasks.creatorUserId", id)
 
     return result
 }
 
-app.get("task", async (req:Request, res:Response) => {
+app.get("/task", async (req:Request, res:Response) => {
     let errorCode = 404
 
     try {
