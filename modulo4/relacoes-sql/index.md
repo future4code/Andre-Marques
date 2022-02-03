@@ -41,3 +41,5 @@ d) Erro porque ele está ligado a outra tabela
 
 b) SELECT movies.id, rating FROM Movies INNER JOIN Rating ON mvoies.id = ratings.movie_id;
 `
+
+
