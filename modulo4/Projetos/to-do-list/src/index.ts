@@ -20,6 +20,13 @@ const server = app.listen(process.env.PORT || 3003, () => {
     }
 })
 
+const dateToStringDate = (date:Date):any => {
+    const day = (date.getDate())
+    const month = (date.getMonth() + 1)
+    const year = date.getFullYear()
+
+    return `${year}/${month}/${day}`
+}
 
 
 
@@ -150,54 +157,6 @@ app.get("/task/delayed", async (req:Request, res:Response) => {
 
 
 
-// EXERCICIO 13 - GET ALL TASKS BY STATUS
-
-const getTasksByStatus = async (status:string):Promise<any> => {
-    const result = await connection("Tasks")
-        .select("Tasks.id", "Tasks.title", "Tasks.description", "Tasks.limitDate", "Tasks.creatorUserId")
-        .whereILike("Tasks.status", status)
-
-    return result
-}
-
-const getCreatorUserNickname1 = async (status:string):Promise<any> => {
-    const result = await connection("Tasks")
-        .join("Users", "Users.Id", "=", "Tasks.creatorUserId")
-        .select("Users.nickname")
-        .whereILike("Tasks.status", status)
-        
-    return result
-}
-
-app.get("/task", async (req:Request, res:Response) => {
-    let errorCode:number = 404
-
-    try{
-        const status = req.query.status as string
-
-        const result = await getTasksByStatus(status)
-        const nickname = await getCreatorUserNickname1(status)
-        const array = []
-
-        if(!status){
-            errorCode = 404
-            throw new Error("It is missing a parameter!")
-        }
-
-        for(let i = 0; i < result.length; i++){
-            let newResult = {...result[i], creatorUserNickname: nickname[i].nickname}
-            array.push(newResult)
-        }
-        // const newResult = {...result, creatorUserNickname: nickname[0].nickname}
-        res.status(200).send(array)
-
-    }catch(error:any){
-        res.status(errorCode).send(error.message)
-    }
-})
-
-
-
 
 // EXERCICIO 7 - GET TASK BY AN USERID------------------------------------------------------------------------------------------------------------------
 
@@ -288,9 +247,9 @@ app.get("/task/:id", async (req:Request, res:Response) => {
     let errorCode:number = 404
 
     try{
-        const id = req.params.id
+        const id = req.params.id as string
 
-        if(!id){
+        if(!id || (id === undefined) || (id === null)){
             errorCode = 404
             throw new Error("It is missing a parameter!")
         }
@@ -298,13 +257,13 @@ app.get("/task/:id", async (req:Request, res:Response) => {
         const task = await getTaskByIdTask(id)
         const user = await getTaskByIdUser(id)
         const nickname = await getCreatorUserNickname(id)
-      
-        const newTask = {...task[0], creatorUserNickname: nickname[0].nickname ,responsibleUsers: user}
-        
+
         if(task.length === 0){
             errorCode = 404
-            throw new Error("Task was not found!")
+            throw new Error("Task was not found or it is missing a parameter!")
         }
+      
+        const newTask = {...task[0], creatorUserNickname: nickname[0].nickname ,responsibleUsers: user}
 
         res.status(200).send(newTask)
 
@@ -347,6 +306,55 @@ app.get("/task/:id/responsible", async (req:Request, res:Response) => {
         }
 
         res.status(200).send(result)
+
+    }catch(error:any){
+        res.status(errorCode).send(error.message)
+    }
+})
+
+
+
+
+// EXERCICIO 13 - GET ALL TASKS BY STATUS
+
+const getTasksByStatus = async (status:string):Promise<any> => {
+    const result = await connection("Tasks")
+        .select("Tasks.id", "Tasks.title", "Tasks.description", "Tasks.limitDate", "Tasks.creatorUserId")
+        .whereILike("Tasks.status", status)
+
+    return result
+}
+
+const getCreatorUserNickname1 = async (status:string):Promise<any> => {
+    const result = await connection("Tasks")
+        .join("Users", "Users.Id", "=", "Tasks.creatorUserId")
+        .select("Users.nickname")
+        .whereILike("Tasks.status", status)
+        
+    return result
+}
+
+app.get("/task", async (req:Request, res:Response) => {
+    let errorCode:number = 404
+
+    try{
+        const status = req.query.status as string
+
+        const result = await getTasksByStatus(status)
+        const nickname = await getCreatorUserNickname1(status)
+        const array = []
+
+        if(!status){
+            errorCode = 404
+            throw new Error("It is missing a parameter!")
+        }
+
+        for(let i = 0; i < result.length; i++){
+            let newResult = {...result[i], creatorUserNickname: nickname[i].nickname}
+            array.push(newResult)
+        }
+        // const newResult = {...result, creatorUserNickname: nickname[0].nickname}
+        res.status(200).send(array)
 
     }catch(error:any){
         res.status(errorCode).send(error.message)
@@ -484,11 +492,11 @@ const createTask = async (id:string, title:string, description:string, limitDate
             id:id,
             title:title,
             description:description,
-            limitDate:limitDate,
+            limitDate:moment(limitDate).format("YYYY/MM/DD"),
             status:status,
             creatorUserId:creatorUserId
-        }).into("Tasks")
-
+        }).into("Tasks") 
+        
     return result
 }
 
@@ -497,11 +505,13 @@ app.put("/task", async (req:Request, res:Response) => {
 
     try{
         const {title, description, limitDate, status, creatorUserId} = req.body
-        console.log(limitDate)
-        const date = limitDate.split("/").reverse().join("/")
-        Date.parse(date)
-        console.log(typeof(date))
-
+        console.log(moment(limitDate).format("YYYY/MM/DD"))
+        // console.log(typeof(limitDate))
+        // console.log(typeof(date))
+        // const newDate = new Date(date)
+        // const date1 = dateToStringDate(newDate)
+        // console.log(date1)
+        // console.log(typeof(date1))
         const id = Date.now().toString()
     
         if(!title || !description || !limitDate || !creatorUserId){
@@ -509,7 +519,7 @@ app.put("/task", async (req:Request, res:Response) => {
             throw new Error("It is missing a parameter!")
         } 
         
-        await createTask(id, title, description, date, status, creatorUserId)
+        await createTask(id, title, description, limitDate, status, creatorUserId)
 
         res.status(201).send("Task was created sucessfully!")
         
@@ -563,6 +573,7 @@ app.put("/user", async (req:Request, res:Response) => {
 // EXERCICIO 15 - DELETE A RESPONSIBLE USER FROM A TASK
 
 const comparingTaskId= async (taskId:string):Promise<any> => {
+    
     const result = await connection("RelationalTables")
         .select("taskId")
         .where("taskId", taskId)
@@ -570,35 +581,40 @@ const comparingTaskId= async (taskId:string):Promise<any> => {
     return result
 }
 
-const comparingResponsibleId= async (responsibleId:string):Promise<any> => {
+const comparingResponsibleId= async (responsibleUserId:string):Promise<any> => {
+    
     const result = await connection("RelationalTables")
         .select("userId")
-        .where("userId", responsibleId)
+        .where("userId", responsibleUserId)
         
     return result
 }
 
-const deleteAResponsibleUserFromATask = async (taskId:string, responsibleId:string):Promise<any> => {
+const deleteAResponsibleUserFromATask = async (taskId:string, responsibleUserId:string):Promise<any> => {
+    
     const result = await connection("RelationalTables")
-        .where("userId" , responsibleId)
+        .where("userId" , responsibleUserId)
         .andWhere("taskId", taskId)
         .del()
 
     return result
 }
 
-app.delete("/task/delete", async (req:Request, res:Response) => {
+app.delete("/task/:taskId/responsible/:responsibleUserId", async (req:Request, res:Response) => {
     let errorCode = 404
 
     try {
-        const {taskId, responsibleId} = req.body
-        const result = await deleteAResponsibleUserFromATask(taskId, responsibleId)
-        const task = await comparingTaskId(taskId)
-        const responsible = await comparingResponsibleId(responsibleId)
-        console.log(task)
-        console.log(responsible)
+        const {taskId, responsibleUserId} = req.params
 
-        if(task.lenght === 0 && responsible.length > 0){
+        if(!taskId || !responsibleUserId){
+            errorCode = 422
+            throw new Error("It is missing a parameter!")
+        } 
+
+        const task = await comparingTaskId(taskId)
+        const responsible = await comparingResponsibleId(responsibleUserId)
+
+        if(task.length === 0 && responsible.length > 0){
             errorCode = 422
             throw new Error("The taskId was not found!")
         }
@@ -608,13 +624,12 @@ app.delete("/task/delete", async (req:Request, res:Response) => {
             throw new Error("The responsibleId was not found!")
         }
 
-        if(!taskId || !responsibleId){
+        if(responsible.length === 0 && task.length === 0){
             errorCode = 422
-            throw new Error("It is missing a parameter!")
-        } else if(result.length === 0){
-            errorCode = 422
-            throw new Error("The task was not found!")
+            throw new Error("The responsibleId and taskId ware not found!")
         }
+
+        const result = await deleteAResponsibleUserFromATask(taskId, responsibleUserId)
 
         res.status(200).send(result)
 
