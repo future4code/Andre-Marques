@@ -5,7 +5,7 @@ import { getUsersOrdered } from "./endpoints/getUsersOrdered"
 import { getUsersByName } from "./endpoints/getUsersByName"
 import { getUsersByType } from "./endpoints/getUsersByType"
 
-app.get("/allUsers", getAllUsers)
+// app.get("/allUsers", getAllUsers)
 // app.get("/users/:page", getFiveUsers)
 // app.get("/users/ordered", getUsersOrdered)
 // app.get("/users", getUsersByName)
