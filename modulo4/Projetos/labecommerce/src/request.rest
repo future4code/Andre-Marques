@@ -1,0 +1,29 @@
+GET http://localhost:3003/users
+Content-Type: application/json
+
+###
+
+POST http://localhost:3003/users
+Content-Type: application/json
+
+{
+    "name": "Amanda Pereira",
+    "email": "amanda_pereira@gmail.com",
+    "password": "abc123"
+}
+
+###
+
+GET http://localhost:3003/products
+Content-Type: application/json
+
+###
+
+POST http://localhost:3003/products
+Content-Type: application/json
+
+{
+    "name": "Banana",
+    "price": 2.50,
+    "image_url": "https://www.ouinolanguages.com/assets/German/vocab/12/images/pic3.jpg"
+}
