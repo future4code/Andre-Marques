@@ -2,6 +2,11 @@ GET https://viacep.com.br/ws/13080080/json
 Content-Type: application/json
 
 
-GET http://localhost:3003/adress
+POST http://localhost:3003/adress
 Content-Type: application/json
 
+{
+    "cep": "13080080",
+    "number": 211,
+    "complement": "casa"
+}
