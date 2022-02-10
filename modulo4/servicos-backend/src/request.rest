@@ -7,7 +7,17 @@ POST http://localhost:3003/adress
 Content-Type: application/json
 
 {
+    "id": "001",
     "cep": "13080080",
     "number": 211,
     "complement": "casa"
+}
+
+###
+
+POST http://localhost:3003/email
+Content-Type: application/json
+
+{
+    "emailFor": "andre.dev.practice@gmail.com"
 }

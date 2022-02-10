@@ -1,4 +1,6 @@
 import { app } from "./app";
-import { getAdressUser } from "./endpoints/getAdressUser";
+import { createAnAdress } from "./endpoints/createAnAdress";
+import { createAnEmail } from "./endpoints/createAnEmail";
 
-app.post("/adress", getAdressUser)
+app.post("/adress", createAnAdress)
+app.post("/email", createAnEmail)

@@ -2,11 +2,18 @@ import { Request, Response } from "express"
 import { connection } from "../data/connection"
 import { getAdressInfo } from "../services/getAdressInfo"
 
-export const createAdress = async(cep:string, number:number, complement?:string):Promise<any> => {
+export const createAdress = async(userId:string, cep:string, number:number, complement?:string):Promise<any> => {
     const adress = await getAdressInfo(cep)
+
+    const user = await connection("users")
+        .select("id")
+        .where("id", userId)
+
+    console.log(user[0])
 
     const result = await connection("adress")
         .insert({
+            userId: user[0].id,
             cep:cep,
             street:adress.data.logradouro,
             number:number,
@@ -20,15 +27,15 @@ export const createAdress = async(cep:string, number:number, complement?:string)
     return result
 }
 
-export async function getAdressUser(req:Request, res:Response):Promise<void>{
+export async function createAnAdress(req:Request, res:Response):Promise<void>{
     let errorCode = 404
 
     try {
-        
+        const id = req.body.id as string
         const cep = req.body.cep as string
         const number = Number(req.body.number)
         const complement = req.body.complement as string
-        const adress = await createAdress(cep, number, complement)
+        const adress = await createAdress(id, cep, number, complement)
 
         if(!adress){
             errorCode = 422
