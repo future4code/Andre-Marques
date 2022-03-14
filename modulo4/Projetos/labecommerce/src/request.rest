@@ -1,0 +1,46 @@
+GET http://localhost:3003/users
+Content-Type: application/json
+
+###
+
+POST http://localhost:3003/users
+Content-Type: application/json
+
+{
+    "name": "Amanda Pereira",
+    "email": "amanda_pereira@gmail.com",
+    "password": "abc123"
+}
+
+###
+
+GET http://localhost:3003/products
+Content-Type: application/json
+
+###
+
+POST http://localhost:3003/products
+Content-Type: application/json
+
+{
+    "name": "Uva",
+    "price": 5.00,
+    "image_url": "https://s.cornershopapp.com/product-images/2828685.jpg?versionId=f6LVfTrtshIz_Z2caK1d3NsWS3CKZ8mg"
+}
+
+
+###
+POST http://localhost:3003/purchases
+Content-Type: application/json
+
+{
+    "user_id": "1644404167579",
+    "product_id": "1644511860138",
+    "quantity": 2
+}
+
+
+###
+
+GET http://localhost:3003/users/1644404167579/purchases
+Content-Type: application/json
